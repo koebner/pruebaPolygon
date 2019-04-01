@@ -2,6 +2,7 @@ const express = require('express');
 const ejs = require('ejs');
 const Openpay =require('openpay');
 var parser = require('body-parser');
+const jwt  = require('jsonwebtoken');
 
 var openpay = new Openpay('mke8rkapbmztlcvtjgbh', 'sk_10f3ae6227d44ce79f7572a6a80c9943');
 
@@ -27,9 +28,11 @@ app.post('/usuario',(req,res) =>{
       direccion : req.body.direccion,
       postal : req.body.postal
   }
+  const token = jwt.sign({persona}, "my_secret_key");
+  console.log(token);
  
   //proceso de control 
-  console.log(persona);
+  //console.log(persona);
   
   //variable untouched de openpay para enviar datos !!!
     var newCustomer = {
@@ -71,6 +74,7 @@ app.post('/usuario',(req,res) =>{
 
 //se pide lista de usuario lo he puesto de manera manual a 20 se puede crear dinamico 
 app.get('/userGet',(req,res)=>{
+    
     var searchParams = {
         'creation[gte]' : '2013-11-01',
         'limit' : 20
@@ -95,5 +99,11 @@ app.get('/userGet',(req,res)=>{
 }
 );
 
+//JWT para bloquear acceso
+// function asegurarRouter(req,res) {
+//   const bearerHeader = req.headers['authorization'];
+//   console.log(bearerHeader);
+  
+// }
 app.listen(3000, () => console.log(`listening on http://localhost:3000`));
 

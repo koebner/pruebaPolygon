@@ -4,17 +4,24 @@
 <% include partials/head %>
 </head>
 <body>
+<div class="container-fluid">
 
-<form action="/userGet" method="GET">
- <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
-  <div class="card-header">Gracias por registrarse!</div>
-  <div class="card-body">
-    <h4 class="card-title"><%= data.fname+' '+  data.lname%></h4>
-    <p class="card-text">con correo <%= data.correo %> </p>
-    </div>
-    <button type="submit" class="btn btn-primary">Ver lista de Usuarios</button>
+<div class="row justify-content-center">
+                <form action="/userGet" method="GET">
+                <div class="card">
+                <div class="card-header">
+                Gracias por Registrarse
+                </div>
+                <div class="card-body">
+                <h4 class="card-title"><%= data.fname+' '+  data.lname%></h4>
+                <p class="card-text">con correo <%= data.correo %> </p>
+                <a href="#" class="btn btn-primary" type="submit">Ver lista de Usuarios</a>
+                </div>
+                </div>
+                </form>
+        </div>
+                               
 </div>
-    </form>
     <% include partials/footer %>
 </body>
 </html>
