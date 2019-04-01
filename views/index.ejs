@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/head %>
+</head>
+<body>
+<div class="container">
+
+    <h1>Ejercicio de OpenPay</h1>
+    <div class="row align-items-start">
+    <form name="form1" method="POST" action="/usuario" >
+    <table>
+        <tr>
+        <td>First name</td>
+        <td><input type="text" name="fname" ></td>
+        </tr>
+        <tr>
+        <td>last name</td>
+        <td><input type="text" name="lname" ></td>
+        </tr>
+        <tr>
+        <td>Email</td>
+        <td><input type="text" name="correo" ></td>
+        </tr>
+        <tr>
+        <td>Telefono Personal</td>
+        <td><input type="text" name="tel_per" ></td>
+        </tr>
+        <tr>
+        <td>Ciudad</td>
+        <td><input type="text" name="ciudad" ></td>
+        </tr>
+        <tr>
+        <td>Estado</td>
+        <td><input type="text" name="estado" ></td>
+        </tr>
+        <tr>
+        <td>Direccion</td>
+        <td><input type="text" name="direccion" ></td>
+        </tr>
+        <tr>
+        <td>Codigo Postal</td>
+        <td><input type="text" name="postal" ></td>
+        </tr>
+        <td><button type="submit" class="btn btn-primary btn-lg btn-block">Registrar</button></td>
+        </tr>
+      
+    </table>
+    </form>   
+    </div>
+    </div>
+ 
+
+    <% include partials/footer %>
+</body>
+</html>

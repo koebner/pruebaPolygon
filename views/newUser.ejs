@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<% include partials/head %>
+</head>
+<body>
+
+<form action="/userGet" method="GET">
+ <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+  <div class="card-header">Gracias por registrarse!</div>
+  <div class="card-body">
+    <h4 class="card-title"><%= data.fname+' '+  data.lname%></h4>
+    <p class="card-text">con correo <%= data.correo %> </p>
+    </div>
+    <button type="submit" class="btn btn-primary">Ver lista de Usuarios</button>
+</div>
+    </form>
+    <% include partials/footer %>
+</body>
+</html>

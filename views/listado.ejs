@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<% include partials/head %>
+    
+</head>
+<body>
+<div class="jumbotron jumbotron-fluid">
+<div class="container">
+  <h1 class="display-4">Lista de Usuarios</h1>
+  <p class="lead">Se muestra la lista de todos los usuarios registrados en OpenPay</p>
+</div>
+</div>
+    <% if (list.length) {
+        %>
+          <% list.forEach((lista) => {
+            %>
+            <div class="list-group">
+                <a  class="list-group-item list-group-item-action active">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Datos de usuarios</h5>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= lista.name+' '+  lista.last_name%></h5>
+                    <small class="text-muted">status : <%=lista.status%></small>
+                    </div>
+                    <p class="mb-1">
+                    correo : <%=lista.email%> Fecha de inscripcion : <%=lista.creation_date%><br>
+                    Ciudad : <%=lista['address'].city%><br>
+                    Estado : <%=lista['address'].state%><br>
+                    Codigo Postal : <%=lista['address'].postal_code%><br>
+                    </p>
+                    <small class="text-muted">balance : <%=lista.balance%></small>
+                </a>
+            </div>
+
+          
+            <% }) %>
+        <% } %>
+     
+
+        <% include partials/footer %>
+</body>
+</html>
