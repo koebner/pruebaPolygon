@@ -28,8 +28,8 @@ app.post('/usuario',(req,res) =>{
       direccion : req.body.direccion,
       postal : req.body.postal
   }
-  const token = jwt.sign({persona}, "my_secret_key");
-  console.log(token);
+  // const token = jwt.sign({persona}, "my_secret_key");
+  // console.log(token);
  
   //proceso de control 
   //console.log(persona);
@@ -73,37 +73,95 @@ app.post('/usuario',(req,res) =>{
 
 
 //se pide lista de usuario lo he puesto de manera manual a 20 se puede crear dinamico 
-app.get('/userGet',(req,res)=>{
-    
-    var searchParams = {
-        'creation[gte]' : '2013-11-01',
-        'limit' : 20
-      };
-      
-      openpay.customers.list(searchParams, function(error, list) {
-        console.log(list);
-        //res.send(list);
-        if (list!=null) {
-          res.render('listado.ejs',
-            {list}
-            
-          );
+app.post('/userGet',asegurarRouter,(req,res)=>{
+      jwt.verify(req.token, 'my_secret_key', (err, authData)=>{
+        if (err) {
+          //res.sendStatus(403);
           
-        } else {
-          res.send('no hay nada ');
-        }
-       // res.render('listado.ejs', )
+        }else{
 
-      });
+                //parametros para hacer la llamada
+          var searchParams = {
+            'creation[gte]' : '2013-11-01',
+            'limit' : 20
+          };
+            //funcion a operar
+            openpay.customers.list(searchParams, function(error, list) {
+              console.log(list);
+              //res.send(list);
+              if (list!=null) {
+                
+                res.render('listado.ejs',
+                  {list}
+                  
+                );
+                
+              } else {
+                res.send('no hay nada ');
+              }
+            // res.render('listado.ejs', )
+
+            });
+
+        }
+
+      }
+      );
 
 }
 );
 
+app.get('/login',(req,res)=>
+{
+res.render('login.ejs');
+});
+
+app.post('/login', (req, res) => {
+
+          const logueo = {
+            mail : req.body.mail,
+            password : req.body.pass
+                    }
+          var searchParams = {
+            'creation[gte]' : '2013-11-01',
+            'limit' : 80
+          };
+            //funcion a operar
+            openpay.customers.list(searchParams, function(error, list) {
+              console.log(list);
+              //res.send(list);
+              if (list!=null) {
+                
+                // res.render('listado.ejs',
+                //   {list}
+                // );
+                
+              } else {
+                res.send('no hay nada ');
+              }
+          
+
+            });
+
+        });
+//formato del token
+//=> authorization:bearer <token>
+
 //JWT para bloquear acceso
-// function asegurarRouter(req,res) {
-//   const bearerHeader = req.headers['authorization'];
-//   console.log(bearerHeader);
+function asegurarRouter(req,res,next) {
+  const bearerHeader = req.headers['authorization'];
+  console.log(bearerHeader);
+  if (typeof bearerHeader !== 'undefined') {
+    //partir el token
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    //ejecuta la siguiente funcion
+    next();
+  }else {
+    res.render('noAuth.ejs');
+  }
   
-// }
+}
 app.listen(3000, () => console.log(`listening on http://localhost:3000`));
 
