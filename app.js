@@ -15,6 +15,7 @@ app.use(parser.json())
 app.set('view engine', 'ejs');
 app.get('/',(req,res) => res.render('index'));
 
+
 //registrando usuarios con POST desde un formulario
 app.post('/usuario',(req,res) =>{
     
@@ -73,11 +74,17 @@ app.post('/usuario',(req,res) =>{
 
 
 //se pide lista de usuario lo he puesto de manera manual a 20 se puede crear dinamico 
-app.post('/userGet',asegurarRouter,(req,res)=>{
+app.get('/userGet',asegurarRouter,(req,res)=>{
+
+      
+      
       jwt.verify(req.token, 'my_secret_key', (err, authData)=>{
         if (err) {
+          error = 'no se comprobo el token';
           //res.sendStatus(403);
-          
+          res.render('noAuth.ejs',
+           {error}
+          );
         }else{
 
                 //parametros para hacer la llamada
@@ -122,17 +129,29 @@ app.post('/login', (req, res) => {
             mail : req.body.mail,
             password : req.body.pass
                     }
-          var searchParams = {
+          var busqueda = {
             'creation[gte]' : '2013-11-01',
             'limit' : 80
           };
             //funcion a operar
-            openpay.customers.list(searchParams, function(error, list) {
-              console.log(list);
+            openpay.customers.list(busqueda, function(error, list) {
+              
               //res.send(list);
               if (list!=null) {
                 
+                
                 // res.render('listado.ejs',
+                  for(var item of list) {
+                    console.log('item: ', item.email);
+                    if (item.email === logueo.mail) {
+
+                      const token = jwt.sign({logueo}, "my_secret_key");
+                      //res.setHeader('authorization',token);
+                      res.redirect('/userGet?token='+token);
+                      
+                    }
+
+                  }
                 //   {list}
                 // );
                 
@@ -149,17 +168,23 @@ app.post('/login', (req, res) => {
 
 //JWT para bloquear acceso
 function asegurarRouter(req,res,next) {
-  const bearerHeader = req.headers['authorization'];
+  
+  const bearerHeader = req.query;
+
   console.log(bearerHeader);
-  if (typeof bearerHeader !== 'undefined') {
+  if (bearerHeader) {
     //partir el token
-    const bearer = bearerHeader.split(' ');
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
+    //const bearer = bearerHeader.split(' ');
+    //const bearerToken = bearer[1];
+    
+    req.token = bearerHeader['token'];
     //ejecuta la siguiente funcion
     next();
   }else {
-    res.render('noAuth.ejs');
+    respuesta = 'no hay token';
+    res.render('noAuth.ejs',
+    {respuesta}
+    );
   }
   
 }
