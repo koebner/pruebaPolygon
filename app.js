@@ -80,7 +80,7 @@ app.get('/userGet',asegurarRouter,(req,res)=>{
       
       jwt.verify(req.token, 'my_secret_key', (err, authData)=>{
         if (err) {
-          error = 'no se comprobo el token';
+          error = 'Usuario no Admitido';     
           //res.sendStatus(403);
           res.render('noAuth.ejs',
            {error}
@@ -139,21 +139,31 @@ app.post('/login', (req, res) => {
               //res.send(list);
               if (list!=null) {
                 
-                
+                encontrado = false;
                 // res.render('listado.ejs',
                   for(var item of list) {
                     console.log('item: ', item.email);
                     if (item.email === logueo.mail) {
 
-                      const token = jwt.sign({logueo}, "my_secret_key");
-                      //res.setHeader('authorization',token);
-                      res.redirect('/userGet?token='+token);
+                      encontrado = true;
+                      
+
                       
                     }
-
+                    
                   }
-                //   {list}
-                // );
+                      if(encontrado) {
+                        const token = jwt.sign({logueo}, "my_secret_key");
+                      //res.setHeader('authorization',token);
+                        res.redirect('/userGet?token='+token);
+                        //estado = 'error al loguearte';
+                        //res.redirect('noAuth.ejs');
+                        //   {list}
+                        // );
+                      }else{
+                        estado = 'error al loguearte';
+                        res.redirect('/userGet?token='+estado);
+                      }
                 
               } else {
                 res.send('no hay nada ');
@@ -172,7 +182,7 @@ function asegurarRouter(req,res,next) {
   const bearerHeader = req.query;
 
   console.log(bearerHeader);
-  if (bearerHeader) {
+  if (bearerHeader['token'] !== null) {
     //partir el token
     //const bearer = bearerHeader.split(' ');
     //const bearerToken = bearer[1];
@@ -182,9 +192,7 @@ function asegurarRouter(req,res,next) {
     next();
   }else {
     respuesta = 'no hay token';
-    res.render('noAuth.ejs',
-    {respuesta}
-    );
+    next();
   }
   
 }

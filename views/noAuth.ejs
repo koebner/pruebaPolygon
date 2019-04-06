@@ -12,13 +12,18 @@
             <div class="jumbotron">
             <h1 class="display-4">No estas autorizado!</h1>
             <p class="lead">Para poder ver las listas de usuarios de OpenPay debe ser autorizado
-            <% if (error) { 
+            
+                <% if (error) { 
                 console.log(error);%>
-                
+                <div class="p-3 mb-2 bg-danger text-white">
+                <%=error%>
+                </div>
                 <% } else {%>
-                <%=respuesta%>
+                    
                 <%}
             %>
+            
+            
             </p>
             <hr class="my-4">
             <p>Para Loguearse de clic en el boton</p>
